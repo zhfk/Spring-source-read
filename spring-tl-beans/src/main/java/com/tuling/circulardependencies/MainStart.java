@@ -1,7 +1,6 @@
 package com.tuling.circulardependencies;
 
 
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
@@ -39,7 +38,7 @@ public class MainStart {
     private static Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>(256);
 
     // 三级缓存
-    private static Map<String, ObjectFactory> factoryEarlySingletonObjects = new ConcurrentHashMap<>(256);
+    private static Map<String, ObjectFactory<?>> factoryEarlySingletonObjects = new ConcurrentHashMap<>(256);
 
 
     // 标识当前是不是循环依赖   如果正在创建并且从一级缓存中没有拿到是不是说明是依赖
@@ -70,7 +69,7 @@ public class MainStart {
         // 1.实例化
         Object beanInstanc = beanClass.newInstance();
 
-        ObjectFactory factory= () -> {
+        ObjectFactory<?> factory= () -> {
             JdkProxyBeanPostProcessor beanPostProcessor=new JdkProxyBeanPostProcessor();
             return beanPostProcessor.getEarlyBeanReference(bean,beanName);
         };
@@ -123,7 +122,7 @@ public class MainStart {
 
             bean=earlySingletonObjects.get(beanName);
             if(bean==null){
-                ObjectFactory factory = factoryEarlySingletonObjects.get(beanName);
+                ObjectFactory<?> factory = factoryEarlySingletonObjects.get(beanName);
                 factory.getObject();
 
             }
