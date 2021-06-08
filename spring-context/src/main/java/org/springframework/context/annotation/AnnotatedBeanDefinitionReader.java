@@ -248,6 +248,7 @@ public class AnnotatedBeanDefinitionReader {
 		}
 
 		BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(abd, beanName);
+		//创建一个cglib代理替换该bean，原始bean注册为 'scopedTarget.<beanName>'
 		definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
 
 		//注册，最终会调用DefaultListableBeanFactory中的registerBeanDefinition方法去注册，
