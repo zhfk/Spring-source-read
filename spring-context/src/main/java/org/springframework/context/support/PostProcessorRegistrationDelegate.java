@@ -78,7 +78,7 @@ final class PostProcessorRegistrationDelegate {
 			//保存BeanDefinitionRegistryPostProcessor类型的后置处理器 BeanDefinitionRegistryPostProcessor 提供注册
 			List<BeanDefinitionRegistryPostProcessor> registryProcessors = new ArrayList<>();
 
-			//循环我们传递进来的beanFactoryPostProcessors
+			//循环我们传递进来的beanFactoryPostProcessors, 手动调用 context.addBeanFactoryPostProcessor 添加进来的后置处理器
 			for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
 				//判断我们的后置处理器是不是BeanDefinitionRegistryPostProcessor
 				if (postProcessor instanceof BeanDefinitionRegistryPostProcessor) {
@@ -178,7 +178,7 @@ final class PostProcessorRegistrationDelegate {
 //-----------------------------------------调用没有实现任何优先级接口自定义BeanDefinitionRegistryPostProcessor完毕--End-----------------------------------------------------------------------------------------------------------------------------
 			//调用 BeanDefinitionRegistryPostProcessor.postProcessBeanFactory方法
 			invokeBeanFactoryPostProcessors(registryProcessors, beanFactory);
-			//调用BeanFactoryPostProcessor 自设的（没有）
+			//调用同时实现了 BeanDefinitionRegistryPostProcessor 和 BeanFactoryPostProcessor 的后置处理器，自设的（没有）
 			invokeBeanFactoryPostProcessors(regularPostProcessors, beanFactory);
 		}
 
